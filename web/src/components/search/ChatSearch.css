@@ -1,0 +1,24 @@
+.chatsearch-body {
+    border-bottom: 1px solid lightgray;
+}
+
+.search-input {
+    margin: 0.3em 0 0.3em 0;
+}
+
+.chatsearch-body .notfound {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.chatsearch-body .notfound-icon {
+    font-size: 8em;
+    color: #92e0fd;
+}
+
+.chatsearch-body .notfound .notfound-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

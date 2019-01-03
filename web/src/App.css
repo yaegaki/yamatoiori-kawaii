@@ -1,0 +1,30 @@
+:root {
+    --icon-color: #92e0fd;;
+    --icon-active-color: #5cb0ff;
+    --menu-font-color: #4c4c4c;
+    --chart-main-color: #a6f0ff;
+    --chart-main-strong-color: #5cb0ff;
+    --chart-sub-color: #f4a6ff;
+    --chart-sub-strong-color: #e94eff;
+}
+
+body {
+    background: #f7f7f7;
+}
+
+a {
+    text-decoration: none;
+}
+
+a:link {
+    color: #26a4ff;
+}
+
+h2 {
+    border-bottom: 1px solid #eee;
+}
+
+.content-container {
+    padding: 10px;
+    overflow: auto;
+}

@@ -1,0 +1,11 @@
+.barchart .grid .tick line {
+    stroke: lightgray;
+}
+
+.barchart .bar.archive {
+    fill: var(--chart-main-color);
+}
+
+.barchart .bar.video {
+    fill: var(--chart-sub-color);
+}

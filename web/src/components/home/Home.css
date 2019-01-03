@@ -1,0 +1,38 @@
+.home .tabbar {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.home .tabbar .tab-item {
+    display: flex;
+    justify-content: center;
+    font-size: 1.5em;
+    box-sizing: border-box;
+    padding: .3em;
+    border-bottom: 3px solid transparent;
+    transition: border 0.3s ease;
+}
+
+.home .tabbar .tab-item.active {
+    border-bottom: 3px solid var(--icon-active-color);
+}
+
+.home .tabbar .tab-item button {
+    border: none;
+    background: white;
+    outline: 0;
+    font-size: 1em;
+    width: 100%;
+    cursor: pointer;
+    color: var(--menu-font-color);
+    transition: background-color 0.3s ease;
+}
+
+.home .tabbar .tab-item.active button {
+    color: var(--icon-active-color);
+}
+
+.home .tabcontent {
+    margin-top: .5em;
+    min-height: 500px;
+}

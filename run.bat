@@ -1,0 +1,1 @@
+py -2 "%localappdata%\Google\Cloud SDK\google-cloud-sdk\bin\dev_appserver.py" app.yaml

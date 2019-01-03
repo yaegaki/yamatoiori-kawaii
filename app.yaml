@@ -1,0 +1,26 @@
+runtime: go
+api_version: go1
+
+handlers:
+
+# All URLs are handled by the Go application script
+- url: /api/.*
+  script: _go_app
+  secure: always
+
+- url: /(.*\.(gif|png|jpeg|jpg|css|js|ico|json))$
+  static_files: web/build/\1
+  upload: web/build/(.*)
+  secure: always
+
+- url: /(.*)
+  static_files: web/build/index.html
+  upload: web/build/index.html
+  secure: always
+
+instance_class: F1
+automatic_scaling:
+  min_idle_instances: 0
+  max_idle_instances: 1
+  min_pending_latency: 1000ms
+  max_pending_latency: automatic

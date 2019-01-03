@@ -1,0 +1,12 @@
+.chat-barchart .bar {
+    fill: var(--chart-main-color);
+}
+
+.chat-barchart .bar.active {
+    fill: var(--chart-main-strong-color);
+}
+
+.chat-barchart .text-container {
+    height: 100%;
+    overflow-y: auto;
+}

@@ -1,0 +1,15 @@
+.chatsearch-result-item .chat {
+    margin-top: 0.2em;
+    display: grid;
+    grid-template-columns: auto 1fr;
+}
+
+.chatsearch-result-item .offsetMsec {
+    font-size: 0.8em;
+    color: gray;
+    line-height: 2em;
+}
+
+.chatsearch-result-item .message {
+    padding-left: 0.5em;
+}

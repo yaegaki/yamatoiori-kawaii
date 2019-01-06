@@ -7,12 +7,14 @@ import codecs
 import time
 import os
 
+from get_local_video_info import get_local_video_info
+
 
 # Set DEVELOPER_KEY to the API key value from the APIs & auth > Registered apps
 # tab of
 #   https://cloud.google.com/console
 # Please ensure that you have enabled the YouTube Data API for your project.
-DEVELOPER_KEY = "AIzaSyDJ7ODCBYl0hX_mqs_i05yO8-UqQpfs4u0"
+DEVELOPER_KEY = "XXXXXXXXX"
 YOUTUBE_API_SERVICE_NAME = "youtube"
 YOUTUBE_API_VERSION = "v3"
 
@@ -64,6 +66,8 @@ output_dir = './work'
 if not os.path.isdir(output_dir):
     os.makedirs(output_dir)
 
+
+print([{x['id']: x} for x in get_local_video_info()])
 ids = get_all_video_ids()
 for id in ids:
     time.sleep(1)

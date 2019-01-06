@@ -8,3 +8,5 @@ web/build
 web/public/asset
 
 __pycache__
+
+scripts/get_secrets.py

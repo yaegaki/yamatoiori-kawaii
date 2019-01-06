@@ -23,12 +23,14 @@ for info in get_local_video_info():
             info['words'] = json.loads(f.read())
         
         wc_dst_path = '{}/wc.png'.format(output_dir)
-        # ワードクラウドのコピー
-        shutil.copyfile('./video_src/{}/wc.png'.format(id), wc_dst_path)
+        if not os.path.exists(wc_dst_path):
+            # ワードクラウドのコピー
+            shutil.copyfile('./video_src/{}/wc.png'.format(id), wc_dst_path)
     
     detail_path = '{}/detail.json'.format(output_dir)
-    with codecs.open(detail_path, 'w', 'utf-8') as f:
-        f.write(json.dumps(info, ensure_ascii=False))
+    if not os.path.exists(detail_path):
+        with codecs.open(detail_path, 'w', 'utf-8') as f:
+            f.write(json.dumps(info, ensure_ascii=False))
     print('{} done.'.format(id))
 
 

@@ -16,7 +16,7 @@ for info in get_local_video_info():
     with codecs.open('./video_src/{}/characterize.json'.format(id), 'r', 'utf-8') as f:
         chats = json.loads(f.read())
         for chat in chats:
-            m = chat['sentence']
+            m = chat['sentence'].replace(':', '：')
             msec = chat['msec']
             lines.append('{}:{}:{}'.format(m, id, msec))
 

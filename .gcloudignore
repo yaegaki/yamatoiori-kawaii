@@ -1,0 +1,16 @@
+.gcloudignore
+.gitignore
+
+.vscode/
+scripts/
+video_src/
+work/
+
+web/node_modules
+web/public
+web/src
+
+package-lock.json
+package.json
+README.md
+tsconfig.json

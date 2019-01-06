@@ -1,0 +1,10 @@
+.vscode/
+video_src/
+work/
+
+web/node_modules
+web/build
+# asset以下はgitでは管理しない==ローカルとgaeにしかない...
+web/public/asset
+
+__pycache__

@@ -35,7 +35,9 @@ class YoutubeIframeWrapper {
         this.readyPromise = new Promise(resolve => {
             this.rawPlayer = new YT.Player(playerContainerId, {
                 videoId: videoId,
-                playsinline: 1,
+                playerVars: {
+                    playsinline: 1,
+                },
                 events: {
                     onReady: () => {
                         if (this.destroyed) return;

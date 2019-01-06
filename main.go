@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -26,7 +27,7 @@ const chatKindName = "Chat2"
 
 const utf8LastChar = "\xef\xbf\xbd"
 
-func getSummaries(w http.ResponseWriter, r *http.Request) {
+func getSummariesWithCache(w http.ResponseWriter, r *http.Request) {
 	ctx := appengine.NewContext(r)
 
 	item, err := memcache.Get(ctx, "summary")
@@ -43,29 +44,56 @@ func getSummaries(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	body, err := getSummaries(ctx, w, r)
+	if err == nil {
+		// 正しくレスポンスを返せた場合のみキャッシュに書き込んでおく
+		item = &memcache.Item{
+			Key:        "summary",
+			Value:      body,
+			Expiration: time.Duration(1440) * time.Second,
+		}
+		memcache.Set(ctx, item)
+	}
+}
+
+// キャッシュを使わない版のSummaryの取得
+// データ更新時などに確実にdatastoreにあるものを取得するために使用する
+// adminにしか許可しない
+func getSummariesWithoutCache(w http.ResponseWriter, r *http.Request) {
+	ctx := appengine.NewContext(r)
+
+	appid := appengine.AppID(ctx)
+	// ローカルの時にはappidがNoneになる
+	// ローカル以外ではログイン必須にする
+	if appid != "None" {
+		u := user.Current(ctx)
+		if u == nil || !u.Admin {
+			http.Error(w, "must need login", http.StatusForbidden)
+			return
+		}
+	}
+
+	getSummaries(ctx, w, r)
+}
+
+func getSummaries(ctx context.Context, w http.ResponseWriter, r *http.Request) ([]byte, error) {
 	q := datastore.NewQuery("Summary").Project("Info")
 
 	summaries := make([]*Summary, 0)
 	if _, err := q.GetAll(ctx, &summaries); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+		return nil, err
 	}
 
 	w.Header().Set("Content-Type", "application/json")
 	body, err := json.Marshal(summaries)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+		return nil, err
 	}
-
-	item = &memcache.Item{
-		Key:        "summary",
-		Value:      body,
-		Expiration: time.Duration(1440) * time.Second,
-	}
-	memcache.Set(ctx, item)
 
 	w.Write(body)
+	return body, nil
 }
 
 func search(w http.ResponseWriter, r *http.Request) {
@@ -121,10 +149,15 @@ func login(w http.ResponseWriter, r *http.Request) {
 func register_summary(w http.ResponseWriter, r *http.Request) {
 	ctx := appengine.NewContext(r)
 
-	u := user.Current(ctx)
-	if u == nil || !u.Admin {
-		http.Error(w, "must need login", http.StatusForbidden)
-		return
+	appid := appengine.AppID(ctx)
+	// ローカルの時にはappidがNoneになる
+	// ローカル以外ではログイン必須にする
+	if appid != "None" {
+		u := user.Current(ctx)
+		if u == nil || !u.Admin {
+			http.Error(w, "must need login", http.StatusForbidden)
+			return
+		}
 	}
 
 	dataStr := r.FormValue("data")
@@ -153,16 +186,25 @@ func register_summary(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// キャッシュを消す
+	// エラーが出ても特にできることがないので無視
+	memcache.Delete(ctx, "summary")
+
 	fmt.Fprintf(w, `<div>%v registerd.</div>`, index)
 }
 
 func register_chat(w http.ResponseWriter, r *http.Request) {
 	ctx := appengine.NewContext(r)
 
-	u := user.Current(ctx)
-	if u == nil || !u.Admin {
-		http.Error(w, "must need login", http.StatusForbidden)
-		return
+	appid := appengine.AppID(ctx)
+	// ローカルの時にはappidがNoneになる
+	// ローカル以外ではログイン必須にする
+	if appid != "None" {
+		u := user.Current(ctx)
+		if u == nil || !u.Admin {
+			http.Error(w, "must need login", http.StatusForbidden)
+			return
+		}
 	}
 
 	dataStr := r.FormValue("data")
@@ -195,11 +237,12 @@ func register_chat(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	http.HandleFunc("/api/summary", getSummaries)
+	http.HandleFunc("/api/summary", getSummariesWithCache)
 	http.HandleFunc("/api/search", search)
 
 	http.HandleFunc("/api/looogin", login)
 
+	http.HandleFunc("/api/summary_without_cache", getSummariesWithoutCache)
 	http.HandleFunc("/api/register_summary", register_summary)
 	http.HandleFunc("/api/register_chat", register_chat)
 	appengine.Main()

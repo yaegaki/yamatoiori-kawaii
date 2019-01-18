@@ -6,7 +6,7 @@ import get_secrets
 # ログインして取得したクッキーをいれる
 cookies = {'SACSID': get_secrets.app_login_cookie()}
 
-endpoint_base = 'https://yamatoiori-kawaii.appspot.com/api'
+endpoint_base = 'https://yamatoiori-kawaii.live/api'
 # endpoint_base = 'http://localhost:8080/api'
 
 summary_endpoint = '{}/summary_without_cache'.format(endpoint_base)

@@ -73,7 +73,7 @@ local_dict = {x['id']: x for x in get_local_video_info()}
 ids = get_all_video_ids()
 for id in ids:
     if id in local_dict:
-        print('{} skipped.'.format(id))
+        # print('{} skipped.'.format(id))
         continue
     time.sleep(1)
     summary = get_video_summary(id)

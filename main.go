@@ -108,7 +108,7 @@ func search(w http.ResponseWriter, r *http.Request) {
 		q = q.Filter("Message >=", qs).Filter("Message <=", qs+utf8LastChar)
 	}
 
-	q = q.Limit(50).Project("Message")
+	q = q.Limit(100).Project("Message")
 	chats := make([]*Chat, 0)
 	if _, err := q.GetAll(ctx, &chats); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

@@ -23,7 +23,7 @@ type Summary struct {
 	Info string
 }
 
-const chatKindName = "Chat2"
+const chatKindName = "Chat3"
 
 const utf8LastChar = "\xef\xbf\xbd"
 

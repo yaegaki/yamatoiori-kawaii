@@ -230,6 +230,13 @@ export class ChatSearch extends Component<RouteComponentProps, ChatSearchState> 
             videos.push({ summary, chats });
         });
 
+        // 配信が新しい順にソートする
+        videos.sort((a, b) => {
+            if (a.summary.date > b.summary.date) return -1;
+            if (a.summary.date < b.summary.date) return 1;
+            return 0;
+        });
+
         this.setState({ ...this.state, lastSearch: search, videos, isSearching: false, })
     }
 }

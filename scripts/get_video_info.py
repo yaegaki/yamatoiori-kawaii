@@ -23,13 +23,13 @@ CHANNEL_ID = 'UCyb-cllCkMREr9de-hoiDrg'
 
 youtube = build(YOUTUBE_API_SERVICE_NAME, YOUTUBE_API_VERSION, developerKey=DEVELOPER_KEY)
 
-def get_all_video_ids(publishedBefore=None):
+def get_all_video_ids(pageToken=None):
     result = youtube.search().list(
         channelId=CHANNEL_ID,
         part='id,snippet',
         maxResults=50,
         order='date',
-        publishedBefore=publishedBefore,
+        pageToken=pageToken,
     ).execute()
 
     items = result.get('items', [])
@@ -37,19 +37,17 @@ def get_all_video_ids(publishedBefore=None):
         return []
 
     videos = []
-    lastPublishedAt = ''
     for item in result.get('items'):
         if item['id']['kind'] == 'youtube#video':
             videos.append(item['id']['videoId'])
         
-        lastPublishedAt = item['snippet']['publishedAt']
-        
+    nextPageToken = None
+    if 'nextPageToken' in result:
+        nextPageToken = result['nextPageToken']
     
-    if len(items) == 50 and lastPublishedAt != '':
+    if nextPageToken is not None:
         time.sleep(1)
-        # lastPublishedAtの値と全く同じデータも返ってくるようなので重複してしまうが
-        # そこまで問題ではない
-        videos.extend(get_all_video_ids(lastPublishedAt))
+        videos.extend(get_all_video_ids(nextPageToken))
     
     
     return videos

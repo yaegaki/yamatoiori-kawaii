@@ -126,7 +126,7 @@ print('done')
 print('you must execute following commands.')
 
 # デプロイ系のコマンドは手動でやる
-print('$ gcloud app deploy')
+print('$ gcloud app deploy --project yamatoiori-kawaii')
 print('$ python ./scripts/register_characterize_chat.py')
 print('$ python ./scripts/register_video_info.py')
 
